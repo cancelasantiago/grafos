@@ -1,5 +1,16 @@
 import mtxp
+import tkinter as Tkinter
+
 g = []
+
+# Primera ventana con valores positivos
+primer_ventana = Tkinter.Tk()
+primer_ventana.geometry("300x300+0+0")
+# A modo estetico le di un titulo
+primer_ventana.title("Grafo")
+# Este tambien es estetico y no influye en el uso del metodo
+
+primer_ventana.mainloop()
 
 print('Selecciona una opción: ')
 print('     1)Ingresar nodos.')
