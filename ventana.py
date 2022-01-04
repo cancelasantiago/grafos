@@ -21,7 +21,12 @@ class App:
     def dist(self, x1, y1, x2, y2):
         d = math.sqrt((abs(x2-x1)**2)+(abs(y2-y1)**2))
         #self.canvas1.create_line(x1, y1, x2, y2)
-        return d 
+        return d
+
+    def largo(self, x1, y1, x2, y2):
+        l = math.sqrt((abs(x2-x1)**2)+(abs(y2-y1)**2))
+        #self.canvas1.create_line(x1, y1, x2, y2)
+        return l
 
     def mover_mouse(self, evento):
         self.ventana1.title(str(evento.x)+'-'+str(evento.y))
@@ -45,7 +50,7 @@ class App:
         salir = False
         while l>0 and i < l and not salir and l>1:
             d = self.dist(self.pos[i][0], self.pos[i][1], e.x, e.y)
-            print(d)
+            #print(d)
             if (d < 50):
                 self.coords["x"]=self.pos[i][0]
                 self.coords["y"]=self.pos[i][1]
@@ -58,8 +63,14 @@ class App:
 
     def release(self , l):
         lis=[]
-        lis.append(self.coords["x"]);lis.append(self.coords["y"]);lis.append(self.coords["x2"]);lis.append(self.coords["x2"])
-        self.final.append(lis)
+        lis.append(self.coords["x"]);lis.append(self.coords["y"]);lis.append(self.coords["x2"]);lis.append(self.coords["y2"])
+        if self.coords["x"] != self.coords["x2"] and self.coords["y"] != self.coords["y2"]:
+            #if 
+            self.final.append(lis)
+        
+        print('coords: ', self.coords)
+        print('final: ', self.final)
+        print('lis: ', lis)
 
     def drag(self, e):
         self.coords["x2"] = e.x
@@ -69,7 +80,7 @@ class App:
         salir = False
         while l>0 and i < l and not salir and l>1:
             d = self.dist(self.pos[i][0], self.pos[i][1], e.x, e.y)
-            print(d)
+            #print(d)
             if (d < 50):
                 self.coords["x2"]=self.pos[i][0]
                 self.coords["y2"]=self.pos[i][1]
