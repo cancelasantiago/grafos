@@ -16,6 +16,14 @@ class arista:
         self.coords_arista = [[x1, y1, x2, y2]]
         self.nodos_conectados = nodos
 
+def imprimir_grafo(g):
+    for i in range(len(g)):
+        print('Nombre de nodo:', g[i][0].name)
+        print('Coord x: ', g[i][0].coords[0], ', Coord y: ', g[i][0].coords[1])
+        for j in range(len(g[i])):
+            print('(',g[i][j].name,')', end=''),
+        print()
+
 def insertar_nodos_ady(g):
     a = input('Ingresar nodo adyacente 1: ')
     b = input('Ingresar nodo adyacente 2: ')

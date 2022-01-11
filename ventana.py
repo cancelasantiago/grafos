@@ -85,11 +85,17 @@ class App:
             #print(self.final)
             for i in range(len(grafo)):
                 if grafo[i][0].coords[0] == self.coords["x"] and grafo[i][0].coords[1] == self.coords["y"]:
-                    nodo1 = mtxp.nodo(i, [self.coords["x2"], self.coords["y2"]])
-                    grafo[i].append(nodo1)
+                    nodo1 = mtxp.nodo(i, [self.coords["x"], self.coords["y"]])
                 elif grafo[i][0].coords[0] == self.coords["x2"] and grafo[i][0].coords[1] == self.coords["y2"]:
-                    nodo2 = mtxp.nodo(i, [self.coords["x"], self.coords["y"]])
-                    grafo[i].append(nodo2)
+                    nodo2 = mtxp.nodo(i, [self.coords["x2"], self.coords["y2"]])
+            esta = False
+            for i in range(len(grafo[nodo1.name])):
+                if grafo[nodo1.name][i].name == nodo2.name:
+                    esta = True
+            if not esta:
+                grafo[nodo1.name].append(nodo2)
+                grafo[nodo2.name].append(nodo1)
+            mtxp.imprimir_grafo(grafo)
         elif self.flag_init:
             #print('?', self.flag_final)
             self.canvas1.delete(self.line)
