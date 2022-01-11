@@ -1,5 +1,8 @@
+import mtxp
 import tkinter as tk
 import math
+
+grafo = []
 
 class App:
     def __init__(self):
@@ -45,6 +48,8 @@ class App:
             self.canvas1.create_text(evento.x,evento.y, fill="black", font=("Arial", 8), text=str(len(self.pos)))
             var = [evento.x, evento.y]
             self.pos.append(var)
+            nodo = mtxp.nodo(len(self.pos)-1, var)
+            grafo.append([nodo])
     
     def click_line(self, e):
         self.coords["x"] = e.x
@@ -77,6 +82,14 @@ class App:
         if self.coords["x"] != self.coords["x2"] and self.coords["y"] != self.coords["y2"] and self.flag_final:
             #if 
             self.final.append(lis)
+            #print(self.final)
+            for i in range(len(grafo)):
+                if grafo[i][0].coords[0] == self.coords["x"] and grafo[i][0].coords[1] == self.coords["y"]:
+                    nodo1 = mtxp.nodo(i, [self.coords["x2"], self.coords["y2"]])
+                    grafo[i].append(nodo1)
+                elif grafo[i][0].coords[0] == self.coords["x2"] and grafo[i][0].coords[1] == self.coords["y2"]:
+                    nodo2 = mtxp.nodo(i, [self.coords["x"], self.coords["y"]])
+                    grafo[i].append(nodo2)
         elif self.flag_init:
             #print('?', self.flag_final)
             self.canvas1.delete(self.line)
@@ -110,5 +123,4 @@ class App:
             self.canvas1.coords(self.lines[-1], self.coords["x"],self.coords["y"],self.coords["x2"],self.coords["y2"])
         #else:
             #self.flag_final = False
-
 app1 = App()

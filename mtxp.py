@@ -1,5 +1,21 @@
 import array as ar
 
+class nodo:
+    def __init__(self, name, coords = None):
+        self.name = name
+        if coords is None:
+            coords = {}
+        else:
+            self.coords = coords
+        self.aristas = []
+    def get_atr(self):
+        return [self.name, self.coords]
+class arista:
+    def __init__(self, val, x1, y1, x2, y2, nodos):
+        self.val = val
+        self.coords_arista = [[x1, y1, x2, y2]]
+        self.nodos_conectados = nodos
+
 def insertar_nodos_ady(g):
     a = input('Ingresar nodo adyacente 1: ')
     b = input('Ingresar nodo adyacente 2: ')
@@ -51,16 +67,8 @@ def insertar_nodos_ady(g):
         a = input('Ingresar nodo adyacente 1: ')
         b = input('Ingresar nodo adyacente 2: ')
 
-def insertar_nodos(g):
-    print('Si no quiere ingresar más nodos, el nombre del mismo debe ser "x".')
-    nodo = input('Ingresar el nombre del nodo: ')
-    while nodo != 'x':
-        if nodo not in g:
-            g.append([nodo])
-        else:
-            print('Ya ingresó ese nodo.')
-        nodo = input('Ingresar el nombre del nodo: ')
-    #print(g)
+def insertar_nodo(g, n):
+    g.append(n)
 
 def agregar_arista_bidir(g, a, b):
     l = len(g)
