@@ -18,8 +18,7 @@ class arista:
 
 def imprimir_grafo(g):
     for i in range(len(g)):
-        print('Nombre de nodo:', g[i][0].name)
-        print('Coord x: ', g[i][0].coords[0], ', Coord y: ', g[i][0].coords[1])
+        print(g[i][0].name, '|(', g[i][0].coords[0], ',', g[i][0].coords[1], ')')
         for j in range(len(g[i])):
             print('(',g[i][j].name,')', end=''),
         print()
