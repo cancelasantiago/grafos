@@ -1,12 +1,13 @@
 import array as ar
 
 class nodo:
-    def __init__(self, name, coords = None):
+    def __init__(self, name, nodo_canvas, coords = None):
         self.name = name
         if coords is None:
             coords = {}
         else:
             self.coords = coords
+        self.nodo_canvas = nodo_canvas
         self.aristas = []
     def get_atr(self):
         return [self.name, self.coords]
@@ -22,6 +23,18 @@ def imprimir_grafo(g):
         for j in range(len(g[i])):
             print('(',g[i][j].name,')', end=''),
         print()
+
+def camino_menor_costo(g, a, b):
+    return 0
+
+def camino_mas_largo(g, a, b):
+    return 0
+
+def valor_aristas_uno(g):
+    return 0
+
+def cambiar_valor_arista(g, a, b):
+    return 0
 
 def insertar_nodos_ady(g):
     a = input('Ingresar nodo adyacente 1: ')
