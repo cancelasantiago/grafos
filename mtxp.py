@@ -20,8 +20,11 @@ class arista:
 def imprimir_grafo(g):
     for i in range(len(g)):
         print(g[i][0].name, '|(', g[i][0].coords[0], ',', g[i][0].coords[1], ')')
-        for j in range(len(g[i])):
-            print('(',g[i][j].name,')', end=''),
+        for j in range(1, len(g[i])):
+            if j == len(g[i])-1:
+                print(g[i][j].name, end='')
+            else:
+                print(g[i][j].name,'-', end='')
         print()
 
 def camino_menor_costo(g, a, b):

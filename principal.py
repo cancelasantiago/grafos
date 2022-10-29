@@ -15,6 +15,7 @@ class App:
         self.final=[] #coords aristas (x1,y1,x2,y2)
         #self.lines = 0
         self.line = 0
+        self.weighing = 0
 
         self.ventana1 = tk.Tk()
 
@@ -39,18 +40,17 @@ class App:
         self.canvas1.bind("<ButtonPress-1>", self.click_line)
         self.canvas1.bind("<B1-Motion>", self.drag) 
         self.canvas1.bind('<ButtonRelease-1>', self.release)
-        self.ventana1.bind('<Key>', self.imprimir)  
+        self.ventana1.bind('<Key>', self.keys)  
         self.ventana1.mainloop()
 
     def dist(self, x1, y1, x2, y2):
         d = math.sqrt((abs(x2-x1)**2)+(abs(y2-y1)**2))
         return d
+    
+    def midpoint (self, x1, y1, x2, y2):
+        return [(x1+x2)/2, (y1+y2)/2]
 
-    def largo(self, x1, y1, x2, y2):
-        l = math.sqrt((abs(x2-x1)**2)+(abs(y2-y1)**2))
-        return l
-
-    def imprimir(self, evento):
+    def keys(self, evento):
         tecla = evento.char
         if tecla == 'i':
             mtxp.imprimir_grafo(grafo)
@@ -95,11 +95,13 @@ class App:
         if salir and l>1:
             self.line = self.canvas1.create_line(self.coords["x"],self.coords["y"],self.coords["x"],self.coords["y"])
             self.canvas1.tag_lower(self.line)
+            self.weighing = self.canvas1.create_text(0, 0, fill="red", font=("Arial", 8), text=str(0))
+            self.canvas1.tag_bind(self.weighing)
         else:
             self.flag_init = False
         
 
-    def release(self , l):
+    def release(self, l):
         self.release_click = 0
         lis=[]
         lis.append(self.coords["x"]);lis.append(self.coords["y"]);lis.append(self.coords["x2"]);lis.append(self.coords["y2"])
@@ -107,7 +109,6 @@ class App:
             self.final.append(lis)
             nodo1 = None
             for i in range(len(grafo)):
-                print(grafo[i][0].coords)
                 if grafo[i][0].coords[0] == self.coords["x"] and grafo[i][0].coords[1] == self.coords["y"]:
                     nodo1 = mtxp.nodo(i, [self.coords["x"], self.coords["y"]])
                 elif grafo[i][0].coords[0] == self.coords["x2"] and grafo[i][0].coords[1] == self.coords["y2"]:
@@ -120,8 +121,9 @@ class App:
                 if not esta:
                     grafo[nodo1.name].append(nodo2)
                     grafo[nodo2.name].append(nodo1)
-        elif self.flag_init:
+        elif self.flag_init: #TODO if line exists delete it
             self.canvas1.delete(self.line)
+            self.canvas1.delete(self.weighing)
 
     def drag(self, e):
         self.coords["x2"] = e.x
@@ -143,6 +145,10 @@ class App:
                 self.flag_final = False
         if l>1 and self.flag_init:
             self.canvas1.coords(self.line, self.coords["x"],self.coords["y"],self.coords["x2"],self.coords["y2"])
+            mid = self.midpoint(self.coords["x"],self.coords["y"],self.coords["x2"],self.coords["y2"])
+            d = int(self.dist(self.coords["x"],self.coords["y"],self.coords["x2"],self.coords["y2"]))
+            self.canvas1.coords(self.weighing, mid[0], mid[1])
+            self.canvas1.itemconfig(self.weighing, text=str(d))
 
 system("cls")
 app1 = App()
