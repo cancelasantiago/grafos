@@ -1,23 +1,23 @@
-import array as ar
 
-class nodo:
-    def __init__(self, name, nodo_canvas, coords = None):
+class node:
+    def __init__(self, name, coords = None):
         self.name = name
         if coords is None:
-            coords = {}
+            self.coords = []
         else:
             self.coords = coords
-        self.nodo_canvas = nodo_canvas
-        self.aristas = []
-    def get_atr(self):
-        return [self.name, self.coords]
-class arista:
-    def __init__(self, val, x1, y1, x2, y2, nodos):
-        self.val = val
-        self.coords_arista = [[x1, y1, x2, y2]]
-        self.nodos_conectados = nodos
+        #self.node_canvas = node_canvas
+        self.adjacent = []
+    def add_adj(self, node):
+        self.adjacent.append(node)
+        
+class edge:
+    def __init__(self, weight, x1, y1, x2, y2, nodes):
+        self.weight = weight
+        self.coords_edge = [[x1, y1, x2, y2]]
+        self.nodes_conectados = nodes
 
-def imprimir_grafo(g):
+def print_graph(g):
     for i in range(len(g)):
         print(g[i][0].name, '|(', g[i][0].coords[0], ',', g[i][0].coords[1], ')')
         for j in range(1, len(g[i])):
