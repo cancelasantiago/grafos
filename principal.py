@@ -27,7 +27,6 @@ class App:
         self.menubar.add_cascade(label="Acciones", menu = self.actmenu)
         self.menubar.add_cascade(label="Algoritmos", menu = self.algmenu)
 
-        self.actmenu.add_command(label="Borrar nodo")
         self.actmenu.add_command(label="Borrar arista")
 
         self.algmenu.add_command(label="Ford Fulkerson")
@@ -36,11 +35,22 @@ class App:
         self.canvas1.grid(column=0, row=0)
         self.canvas1.bind('<Motion>', self.move_mouse)
         self.canvas1.bind('<Button-3>', self.click_mouse)
+        self.canvas1.bind("<Double-1>", self.deleteNodeOrEdge)
         self.canvas1.bind("<ButtonPress-1>", self.click_line)
         self.canvas1.bind("<B1-Motion>", self.drag) 
         self.canvas1.bind('<ButtonRelease-1>', self.release)
         self.window.bind('<Key>', self.keys)  
         self.window.mainloop()
+
+    def deleteNodeOrEdge(self, event): #tkinter ask for 2 arguements
+        print(event.x, event.y) #TODO
+        for i in range(len(self.graph)):
+            if self.dist(event.x, event.y, self.graph[i].coords[0], self.graph[i].coords[1]) < 10:
+                oval_target = self.graph[i].canvas["oval"]
+                text_target = self.graph[i].canvas["name"]
+                self.canvas1.delete(oval_target)
+                self.canvas1.delete(text_target)
+    #eliminar las aristas tamb
 
     def dist(self, x1, y1, x2, y2):
         d = math.sqrt((abs(x2-x1)**2)+(abs(y2-y1)**2))
@@ -79,13 +89,14 @@ class App:
             if (self.dist(envent.x, envent.y, self.graph[i].coords[0], self.graph[i].coords[1])) < 50:
                 rg = False
         if rg:    
-            node_canvas = self.canvas1.create_oval(envent.x-8, envent.y-8, envent.x+8, envent.y+8, fill = 'lightblue1')
+            node_canvas = self.canvas1.create_oval(envent.x-8, envent.y-8, envent.x+8, envent.y+8, fill = 'lightblue1', tag = str(l))
+            #self.node_shape.append([l, node_canvas])
             # self.canvas1.create_text(envent.x,envent.y, fill="black", font=("Arial", 8), text=str(len(self.pos)))
-            self.canvas1.create_text(envent.x,envent.y, fill="black", font=("Arial", 8), text=str(l))
+            text_canvas = self.canvas1.create_text(envent.x,envent.y, fill="black", font=("Arial", 8), text=str(l))
             var = [envent.x, envent.y]
             #self.pos.append(var)
             #node = mtxp.node(len(self.pos)-1, var)
-            node = mtxp.node(len(self.graph)-1, var)
+            node = mtxp.node(len(self.graph)-1,{"oval": node_canvas, "name": text_canvas}, [], var)
             self.graph.append(node)
     
     def click_line(self, e): #left click to create line
@@ -125,9 +136,9 @@ class App:
             node1 = None
             for i in range(len(self.graph)):
                 if self.graph[i].coords[0] == self.coords["x1"] and self.graph[i].coords[1] == self.coords["y1"]:
-                    node1 = mtxp.node(i, [self.coords["x1"], self.coords["y1"]])
+                    node1 = mtxp.node(i, {}, [], [self.coords["x1"], self.coords["y1"]])
                 elif self.graph[i].coords[0] == self.coords["x2"] and self.graph[i].coords[1] == self.coords["y2"]:
-                    node2 = mtxp.node(i, [self.coords["x2"], self.coords["y2"]])
+                    node2 = mtxp.node(i, {}, [], [self.coords["x2"], self.coords["y2"]])
             find = False
             if node1 is not None:
                 for i in range(len(self.graph)):
@@ -137,8 +148,9 @@ class App:
                     #mtxp.arista(self.temp_weight, node1.coords[0], node1.coords[1], node2.coords[0], node2.coords[1], [node1, node2])
                     # self.graph[node1.name].append(node2)
                     # self.graph[node2.name].append(node1)
-                    self.graph[node1.name].add_adj(node2)
-                    self.graph[node2.name].add_adj(node1)
+                    self.graph[node1.name].add_adj_node(node2)
+                    self.graph[node1.name].add_adj_edge(self.line)
+                    self.graph[node2.name].add_adj_node(node1)
         elif self.flag_init: #TODO if line exists delete it
             self.canvas1.delete(self.line)
             self.canvas1.delete(self.weighing)

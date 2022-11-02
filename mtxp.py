@@ -1,20 +1,25 @@
 
 class node:
-    def __init__(self, name, coords = None):
+    def __init__(self, name, canvas, adj_edge, coords = None):
         self.name = name
+        self.canvas = canvas
+        self.edges = adj_edge
         if coords is None:
             self.coords = []
         else:
             self.coords = coords
         #self.node_canvas = node_canvas
         self.adjacent = []
-    def add_adj(self, node):
+    def add_adj_edge(self, edge):
+        self.edges.append(edge)
+    def add_adj_node(self, node):
         self.adjacent.append(node)
         
 class edge:
-    def __init__(self, weight, x1, y1, x2, y2, nodes):
+    def __init__(self, weight, x1, y1, x2, y2, canvas, nodes):
         self.weight = weight
         self.coords_edge = [[x1, y1, x2, y2]]
+        self.canvas = canvas
         self.nodes_conectados = nodes
 
 def print_graph(g):
