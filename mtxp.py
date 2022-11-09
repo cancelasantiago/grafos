@@ -1,19 +1,27 @@
-
 class node:
-    def __init__(self, name, canvas, adj_edge, coords = None):
-        self.name = name
+    def __init__(self, key, canvas, edges = None, coords = None, adjacents = None):
+        self.key = key
         self.canvas = canvas
-        self.edges = adj_edge
+        self.edges = edges
+        if edges is None:
+            self.edges = []
+        else:
+            self.edges = edges
         if coords is None:
             self.coords = []
         else:
             self.coords = coords
-        #self.node_canvas = node_canvas
-        self.adjacent = []
+        self.adjacents = adjacents
     def add_adj_edge(self, edge):
         self.edges.append(edge)
     def add_adj_node(self, node):
-        self.adjacent.append(node)
+        self.adjacents.append(node)
+    def get_adjacents(self):
+        res = []
+        for node in self.adjacents:
+            res.append([node["node"].key, node["weight"]])
+        return res
+        
         
 class edge:
     def __init__(self, weight, x1, y1, x2, y2, canvas, nodes):
@@ -23,110 +31,106 @@ class edge:
         self.nodes_conectados = nodes
 
 def print_graph(g):
-    for i in range(len(g)):
-        print(g[i][0].name, '|(', g[i][0].coords[0], ',', g[i][0].coords[1], ')')
-        for j in range(1, len(g[i])):
-            if j == len(g[i])-1:
-                print(g[i][j].name, end='')
-            else:
-                print(g[i][j].name,'-', end='')
-        print()
+    for node in g:
+        print ("key: ", node.key, "-> ", node.edges, node.get_adjacents())
 
-def camino_menor_costo(g, a, b):
-    return 0
+def graph_mtx_simplified(graph):
+    res = []
+    for node in graph:
+        res.append([node.key])
+        ix = len(res) - 1
+        for adj in node.adjacents:
+            res[ix].append(adj["node"].key)
+    return res
+# [0, 2] [1,5,4,3] [2, 0] [3,1] [4,1] [5,1] [6,7] [7,6]
 
-def camino_mas_largo(g, a, b):
-    return 0
+#          1— 2 ——— 3
+#         /|   | \   |\
+#        / |   |  \  | \
+#       0  |   8   \ |  4
+#        \ |  /|    \| /
+#          7 — 6 ————5       
 
-def valor_aristas_uno(g):
-    return 0
 
-def cambiar_valor_arista(g, a, b):
-    return 0
+# [[w(0, 0), w(0, 1),w(0, 2),w(0, 3),w(0, 4),w(0, 5),w(0, 6),w(0, 7)],
+#  [w(1, 0), w(1, 1),w(0, 2),w(1, 3),w(1, 4),w(1, 5),w(1, 6),w(1, 7)]
+#  [w(2, 0), w(2, 1),w(0, 2),w(2, 3),w(2, 4),w(2, 5),w(2, 6),w(2, 7)]
+#  [w(3, 0), w(3, 1),w(0, 2),w(3, 3),w(3, 4),w(3, 5),w(3, 6),w(3, 7)]
+#  [w(4, 0), w(4, 1),w(0, 2),w(4, 3),w(4, 4),w(4, 5),w(4, 6),w(4, 7)]
+#  [w(5, 0), w(5, 1),w(0, 2),w(5, 3),w(5, 4),w(5, 5),w(5, 6),w(5, 7)]
+#  [w(6, 0), w(6, 1),w(0, 2),w(6, 3),w(6, 4),w(6, 5),w(6, 6),w(6, 7)]
+#  [w(7, 0), w(7, 1),w(0, 2),w(7, 3),w(7, 4),w(7, 5),w(7, 6),w(7, 7)]]
 
-def insertar_nodos_ady(g):
-    a = input('Ingresar nodo adyacente 1: ')
-    b = input('Ingresar nodo adyacente 2: ')
+# [[0, 4, 0, 0, 0, 0, 0, 8, 0] ,
+#  [4, 0, 8, 0, 0, 0, 0, 11, 0],
+#  [0, 8, 0, 7, 0, 4, 0, 0, 2] ,
+#  [0, 0, 7, 0, 9, 14, 0, 0, 0],
+#  [0, 0, 0, 9, 0, 10, 0, 0, 0],
+#  [0, 0, 4, 14, 10, 0, 2, 0, 0],
+#  [0, 0, 0, 0, 0, 2, 0, 1, 6],
+#  [8, 11, 0, 0, 0, 0, 1, 0, 7],
+#  [0, 0, 2, 0, 0, 0, 6, 7, 0]
+#  ]
+# {ix: , node_key: }
 
-    while a != 'x' or b !='x':
-        if not g:
-            g.append([a,b])
-            g.append([b,a])
-        else:
-            estaA = False #indica si a esta en g[i][0]
-            estaB = False #indica si a esta en g[i][0]
-            i=0
-            while (not estaA or not estaB) and i<len(g):
-                if a == g[i][0]:
-                    estaA = True
-                    if b not in g[i]:
-                        g[i].append(b)
-                    i = i+1
-                    while not estaB and i<len(g):
-                        if b == g[i][0]: 
-                            estaB = True
-                            if a not in g[i]:
-                                g[i].append(a)
-                        i = i+1
-                else:
-                    if b == g[i][0]:
-                        estaB = True
-                        if a not in g[i]:
-                            g[i].append(a)
-                        i = i+1
-                        while not estaA and i<len(g):
-                            if a == g[i][0]: 
-                                estaA = True
-                                if b not in g[i]:
-                                    g[i].append(b)
-                            i = i+1
-                    else: i=i+1
-            if not estaB and estaA and i>=len(g):
-                g.append([b,a])
-            else:
-                if not estaA and estaB and i>=len(g):
-                    g.append([a,b])
-                else: 
-                    if not estaA and not estaB and i>=len(g):
-                        g.append([a,b])
-                        g.append([b,a])
-            i = 0
-        print(g)
-        a = input('Ingresar nodo adyacente 1: ')
-        b = input('Ingresar nodo adyacente 2: ')
+def get_weight(graph, ix1, ix2): #return the weight between node on index ix1 and node on index ix2
+        res = 0
+        source_node = graph[ix1]
+        adj_aux = graph[ix2]
+        for adj in source_node.adjacents:
+            if adj["node"].key == adj_aux.key:
+                res = adj["weight"]
+        return res
 
-def insertar_nodo(g, n):
-    g.append(n)
+def graph_to_mtx(graph): #return the adjacent matrix from the canvas graph
+    res = [[0 for column in range(len(graph))] for row in range(len(graph))]
+    for i in range(len(graph)):
+        for j in range(len(graph)):
+            res[i][j] = get_weight(graph, i, j)
+    return res
 
-def agregar_arista_bidir(g, a, b):
-    l = len(g)
-    estaA = False
-    estaB = False
-    for i in range(l):
-        if a == g[i][0]:
-            estaA = True
-            aix = i
-        if b == g[i][0]:
-            estaB = True
-            bix = i
-    if estaA and estaB:
-        g[aix].append(b)
-        g[bix].append(a)
-    else:
-        print('Uno de los nodos no se encuentra.')
 
-def agregar_arista_unidir(g, a, b):
-    l = len(g)
-    estaA = False
-    estaB = False
-    for i in range(l):
-        if a == g[i][0]:
-            estaA = True
-            aix = i
-        if b == g[i][0]:
-            estaB = True
-            bix = i
-    if estaA and estaB:
-        g[aix].append(b)
-    else:
-        print('Uno de los nodos no se encuentra.')
+#   6 — 7
+#   0 — 2
+#         1
+#       / | \
+#      /  |  \
+#     5   4   3
+
+# [0, 2] [1,5,4,3] [2, 0] [3,1] [4,1] [5,1] [6,7] [7,6]
+
+# def cant_sub_grafos(graph)
+    # para cada nodo con sus nodos ady los agrupo con los otros que los contengan
+        # la cant de conj que armo son los grafos disj
+
+# [0, 2] [2, 0] || [1,5,4,3] [3,1] [4,1] [5,1] || [6,7] [7,6] = 3 
+
+def count_sub_graphs(graph):
+    mins = []
+    for node in graph:
+        if min(node) not in mins:
+            mins.append(min(node))
+    return len(mins)
+
+def min_distance(graph, dist, shortest_path):
+    min = float("inf")
+
+    for v in range(len(graph)):
+        if dist[v] < min and shortest_path[v] == False:
+            min = dist[v]
+            min_index = v
+    return min_index
+
+def dijkstra(graph, src):
+    dist = float("inf") * graph
+    dist[src] = 0
+    shortest_path = [False] * graph
+
+    for cout in range(graph):
+        u = min_distance(graph, dist, shortest_path)
+        shortest_path[u] = True
+
+        for v in range (graph):
+            if (graph[u][v] > 0 and shortest_path[v] == False and dist[v] > dist[u] + graph[u][v]):
+                dist[v] = dist[u] + graph[u][v]
+    return dist
