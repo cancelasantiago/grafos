@@ -40,6 +40,10 @@ class App:
         self.canvas1.bind("<ButtonPress-1>", self.click_line)
         self.canvas1.bind("<B1-Motion>", self.drag) 
         self.canvas1.bind('<ButtonRelease-1>', self.release)
+        Upper_left = tk.Label(self.window,text ='Commands:\n i: print graph c: clear graph d: dijkstra q: quit r: reset', justify="left")
+        Upper_left.place(relx = 0.0,
+                  rely = 0.0,
+                  anchor ='nw')
         self.window.bind('<Key>', self.keys)  
         self.window.mainloop()
 
@@ -115,6 +119,9 @@ class App:
             self.incremental_id = 0
             self.graph = []
             system("cls")
+        elif key == 'd':
+            dist = (mtxp.dijkstra(mtxp.graph_to_mtx(self.graph), 0))
+            mtxp.printSolution(dist, self.graph)
         elif key == 'q':
             quit()
         elif key == 'r':
